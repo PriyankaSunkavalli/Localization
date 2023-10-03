@@ -1,24 +1,38 @@
-import logo from './logo.svg';
 import './App.css';
+import i18n from 'i18next'
+import { Suspense } from 'react';
+import { initReactI18next, useTranslation } from 'react-i18next';
+import english from './english.json'
+import german from './german.json'
+
+const translationEn=english
+const translationGe=german
+
+i18n.use(initReactI18next).init({
+  resources:{
+    en:{translation:translationEn},
+    ge:{translation:translationGe}
+  },
+  lng:'en',
+  fallbackLng:'en',
+  interpolation:{escapeValue:false}
+})
 
 function App() {
+  const {t}=useTranslation()
+  const onLangChange=(e)=>{
+    i18n.changeLanguage(e.target.value)
+  }
   return (
+    <Suspense fallback='Loading...'>
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>{t('translation.data')}</h1>
+      <select name='language' onChange={onLangChange}>
+        <option value='en'>English</option>
+        <option value='ge'>German</option>
+      </select>
     </div>
+    </Suspense>
   );
 }
 
